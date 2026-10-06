@@ -1,6 +1,8 @@
 from fastapi import FastAPI, Request
-from fastapi.responses import JSONResponse
+from fastapi.responses import JSONResponse, FileResponse
 from fastapi.middleware.cors import CORSMiddleware
+from fastapi.staticfiles import StaticFiles
+from pathlib import Path
 
 from app.routers import (
     customer,
@@ -21,6 +23,14 @@ app = FastAPI(
     description="SmartCart E-Commerce and ML Application",
     version="1.0.0"
 )
+
+
+# -----------------------------
+# PATH CONFIGURATION
+# -----------------------------
+
+BASE_DIR = Path(__file__).resolve().parent.parent
+FRONTEND_DIR = BASE_DIR / "frontend"
 
 
 # -----------------------------
@@ -55,6 +65,17 @@ async def global_exception_handler(
 
 
 # -----------------------------
+# FRONTEND STATIC FILES
+# -----------------------------
+
+app.mount(
+    "/frontend",
+    StaticFiles(directory=str(FRONTEND_DIR)),
+    name="frontend"
+)
+
+
+# -----------------------------
 # API ROUTERS
 # -----------------------------
 
@@ -76,9 +97,9 @@ app.include_router(auth.router)
 
 @app.get("/")
 def home():
-    return {
-        "message": "Welcome to SmartCart API"
-    }
+    return FileResponse(
+        FRONTEND_DIR / "index.html"
+    )
 
 
 # -----------------------------
