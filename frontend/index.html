@@ -1,0 +1,678 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>SmartCart - Login</title>
+
+    <style>
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            min-height: 100vh;
+            font-family: Arial, Helvetica, sans-serif;
+
+            background: linear-gradient(
+                135deg,
+                #667eea,
+                #764ba2,
+                #f093fb
+            );
+
+            display: flex;
+            align-items: center;
+            justify-content: center;
+
+            padding: 20px;
+        }
+
+        .container {
+            width: 100%;
+            max-width: 430px;
+        }
+
+        .login-card {
+            background: rgba(255, 255, 255, 0.97);
+
+            border-radius: 25px;
+
+            padding: 40px;
+
+            box-shadow:
+                0 20px 60px rgba(0, 0, 0, 0.25);
+
+            animation: slideUp 0.7s ease;
+        }
+
+        @keyframes slideUp {
+            from {
+                opacity: 0;
+                transform: translateY(40px);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .logo {
+            text-align: center;
+
+            font-size: 55px;
+
+            margin-bottom: 10px;
+        }
+
+        h1 {
+            text-align: center;
+
+            color: #4c51bf;
+
+            margin-bottom: 8px;
+        }
+
+        .subtitle {
+            text-align: center;
+
+            color: #666;
+
+            margin-bottom: 30px;
+        }
+
+        .form-group {
+            margin-bottom: 20px;
+        }
+
+        label {
+            display: block;
+
+            margin-bottom: 8px;
+
+            font-weight: bold;
+
+            color: #333;
+        }
+
+        input {
+            width: 100%;
+
+            padding: 14px 16px;
+
+            border: 2px solid #e2e8f0;
+
+            border-radius: 12px;
+
+            font-size: 16px;
+
+            outline: none;
+
+            transition: 0.3s;
+        }
+
+        input:focus {
+            border-color: #667eea;
+
+            box-shadow:
+                0 0 0 3px rgba(102, 126, 234, 0.15);
+        }
+
+        button {
+            width: 100%;
+
+            padding: 15px;
+
+            border: none;
+
+            border-radius: 12px;
+
+            background: linear-gradient(
+                135deg,
+                #667eea,
+                #764ba2
+            );
+
+            color: white;
+
+            font-size: 17px;
+
+            font-weight: bold;
+
+            cursor: pointer;
+
+            transition: 0.3s;
+        }
+
+        button:hover {
+            transform: translateY(-2px);
+
+            box-shadow:
+                0 8px 20px rgba(102, 126, 234, 0.35);
+        }
+
+        button:disabled {
+            opacity: 0.7;
+
+            cursor: not-allowed;
+
+            transform: none;
+        }
+
+        #message {
+            display: none;
+
+            margin-top: 20px;
+
+            padding: 12px;
+
+            border-radius: 10px;
+
+            text-align: center;
+
+            font-weight: bold;
+        }
+
+        .success {
+            display: block !important;
+
+            background: #dcfce7;
+
+            color: #166534;
+        }
+
+        .error {
+            display: block !important;
+
+            background: #fee2e2;
+
+            color: #991b1b;
+        }
+
+        .register-link {
+            text-align: center;
+
+            margin-top: 22px;
+
+            color: #666;
+        }
+
+        .register-link a {
+            color: #667eea;
+
+            font-weight: bold;
+
+            text-decoration: none;
+        }
+
+        .register-link a:hover {
+            text-decoration: underline;
+        }
+
+        .features {
+            display: flex;
+
+            justify-content: space-around;
+
+            margin-top: 25px;
+
+            color: #666;
+
+            font-size: 13px;
+        }
+
+        .feature {
+            text-align: center;
+        }
+
+        .feature-icon {
+            font-size: 22px;
+
+            margin-bottom: 5px;
+        }
+    </style>
+</head>
+
+<body>
+
+<div class="container">
+
+    <div class="login-card">
+
+        <div class="logo">
+            🛒
+        </div>
+
+        <h1>
+            SmartCart
+        </h1>
+
+        <p class="subtitle">
+            Smart Shopping powered by AI
+        </p>
+
+
+        <!-- LOGIN FORM -->
+
+        <form id="loginForm">
+
+            <div class="form-group">
+
+                <label for="username">
+                    👤 Username
+                </label>
+
+                <input
+                    type="text"
+                    id="username"
+                    placeholder="Enter your username"
+                    autocomplete="username"
+                    required
+                >
+
+            </div>
+
+
+            <div class="form-group">
+
+                <label for="password">
+                    🔐 Password
+                </label>
+
+                <input
+                    type="password"
+                    id="password"
+                    placeholder="Enter your password"
+                    autocomplete="current-password"
+                    required
+                >
+
+            </div>
+
+
+            <button
+                type="submit"
+                id="loginButton"
+            >
+                🚀 Login
+            </button>
+
+        </form>
+
+
+        <!-- MESSAGE -->
+
+        <div id="message"></div>
+
+
+        <!-- REGISTER -->
+
+        <div class="register-link">
+
+            Don't have an account?
+
+            <a href="register.html">
+                Register here
+            </a>
+
+        </div>
+
+
+        <!-- FEATURES -->
+
+        <div class="features">
+
+            <div class="feature">
+
+                <div class="feature-icon">
+                    🤖
+                </div>
+
+                <div>
+                    AI
+                </div>
+
+            </div>
+
+
+            <div class="feature">
+
+                <div class="feature-icon">
+                    🛍️
+                </div>
+
+                <div>
+                    Shopping
+                </div>
+
+            </div>
+
+
+            <div class="feature">
+
+                <div class="feature-icon">
+                    💡
+                </div>
+
+                <div>
+                    Smart
+                </div>
+
+            </div>
+
+        </div>
+
+    </div>
+
+</div>
+
+
+<script>
+
+const API_URL = "http://127.0.0.1:8000";
+
+
+/* ==========================================
+   ELEMENTS
+========================================== */
+
+const loginForm =
+    document.getElementById("loginForm");
+
+const loginButton =
+    document.getElementById("loginButton");
+
+const message =
+    document.getElementById("message");
+
+
+/* ==========================================
+   SHOW MESSAGE
+========================================== */
+
+function showMessage(text, type) {
+
+    message.textContent = text;
+
+    message.className = type;
+
+    message.style.display = "block";
+}
+
+
+/* ==========================================
+   LOGIN
+========================================== */
+
+loginForm.addEventListener(
+    "submit",
+    async function(event) {
+
+        event.preventDefault();
+
+
+        const username =
+            document
+                .getElementById("username")
+                .value
+                .trim();
+
+
+        const password =
+            document
+                .getElementById("password")
+                .value;
+
+
+        if (!username || !password) {
+
+            showMessage(
+                "❌ Please enter username and password.",
+                "error"
+            );
+
+            return;
+        }
+
+
+        try {
+
+            /* Disable button */
+
+            loginButton.disabled = true;
+
+            loginButton.textContent =
+                "⏳ Logging in...";
+
+
+            message.style.display =
+                "none";
+
+
+            /* ==========================================
+               CALL LOGIN API
+            ========================================== */
+
+            const response = await fetch(
+                API_URL + "/auth/login",
+                {
+                    method: "POST",
+
+                    headers: {
+                        "Content-Type":
+                            "application/json"
+                    },
+
+                    body: JSON.stringify({
+                        username: username,
+                        password: password
+                    })
+                }
+            );
+
+
+            /* ==========================================
+               READ RESPONSE
+            ========================================== */
+
+            const data =
+                await response.json();
+
+
+            console.log(
+                "Login API response:",
+                data
+            );
+
+
+            /* ==========================================
+               LOGIN ERROR
+            ========================================== */
+
+            if (!response.ok) {
+
+                throw new Error(
+                    data.detail ||
+                    "Login failed"
+                );
+            }
+
+
+            /* ==========================================
+               VALIDATE TOKEN
+            ========================================== */
+
+            if (
+                !data.access_token ||
+                data.access_token.trim() === ""
+            ) {
+
+                throw new Error(
+                    "Login successful, but access token was not received."
+                );
+            }
+
+
+            /* ==========================================
+               CLEAR OLD LOGIN DATA
+            ========================================== */
+
+            localStorage.removeItem(
+                "access_token"
+            );
+
+            localStorage.removeItem(
+                "customer_id"
+            );
+
+            localStorage.removeItem(
+                "username"
+            );
+
+            localStorage.removeItem(
+                "role"
+            );
+
+
+            /* ==========================================
+               SAVE NEW LOGIN DATA
+            ========================================== */
+
+            localStorage.setItem(
+                "access_token",
+                data.access_token
+            );
+
+
+            localStorage.setItem(
+                "customer_id",
+                String(data.customer_id)
+            );
+
+
+            localStorage.setItem(
+                "username",
+                data.username
+            );
+
+
+            localStorage.setItem(
+                "role",
+                data.role
+            );
+
+
+            /* ==========================================
+               VERIFY LOCAL STORAGE
+            ========================================== */
+
+            const savedToken =
+                localStorage.getItem(
+                    "access_token"
+                );
+
+
+            const savedCustomerId =
+                localStorage.getItem(
+                    "customer_id"
+                );
+
+
+            console.log(
+                "Saved access token:",
+                savedToken ? "YES" : "NO"
+            );
+
+
+            console.log(
+                "Saved customer ID:",
+                savedCustomerId
+            );
+
+
+            /* ==========================================
+               CHECK TOKEN STORAGE
+            ========================================== */
+
+            if (!savedToken) {
+
+                throw new Error(
+                    "Unable to save login token in browser."
+                );
+            }
+
+
+            /* ==========================================
+               CHECK CUSTOMER ID
+            ========================================== */
+
+            if (
+                data.customer_id === null ||
+                data.customer_id === undefined
+            ) {
+
+                throw new Error(
+                    "Your account is not mapped to a customer."
+                );
+            }
+
+
+            /* ==========================================
+               SUCCESS
+            ========================================== */
+
+            showMessage(
+                "✅ Login successful! Redirecting...",
+                "success"
+            );
+
+
+            /* ==========================================
+               REDIRECT
+            ========================================== */
+
+            setTimeout(
+                function() {
+
+                    window.location.href =
+                        "products.html";
+
+                },
+                800
+            );
+
+        }
+
+
+        catch (error) {
+
+            console.error(
+                "Login error:",
+                error
+            );
+
+
+            showMessage(
+                "❌ " + error.message,
+                "error"
+            );
+
+
+            loginButton.disabled =
+                false;
+
+
+            loginButton.textContent =
+                "🚀 Login";
+        }
+
+    });
+
+</script>
+
+</body>
+</html>

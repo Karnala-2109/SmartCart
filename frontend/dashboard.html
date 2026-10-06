@@ -1,0 +1,1756 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>SmartCart - Dashboard</title>
+
+    <style>
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            font-family: Arial, Helvetica, sans-serif;
+        }
+
+        body {
+            min-height: 100vh;
+            background: linear-gradient(135deg, #eef2ff, #f8fafc);
+            color: #1e293b;
+        }
+
+        /* =========================
+           NAVBAR
+        ========================== */
+
+        .navbar {
+            background: linear-gradient(135deg, #4f46e5, #7c3aed);
+            color: white;
+            padding: 18px 40px;
+
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.15);
+        }
+
+        .logo {
+            font-size: 26px;
+            font-weight: bold;
+        }
+
+        .nav-links {
+            display: flex;
+            gap: 10px;
+            align-items: center;
+            flex-wrap: wrap;
+        }
+
+        .nav-links a {
+            color: white;
+            text-decoration: none;
+            padding: 9px 14px;
+            border-radius: 8px;
+            font-size: 14px;
+            transition: 0.3s;
+        }
+
+        .nav-links a:hover {
+            background: rgba(255, 255, 255, 0.18);
+        }
+
+        .nav-links .active {
+            background: rgba(255, 255, 255, 0.2);
+        }
+
+        /* =========================
+           MAIN
+        ========================== */
+
+        .container {
+            width: 92%;
+            max-width: 1200px;
+            margin: 35px auto;
+        }
+
+        .page-title {
+            text-align: center;
+            margin-bottom: 25px;
+        }
+
+        .page-title h1 {
+            color: #312e81;
+            font-size: 34px;
+            margin-bottom: 8px;
+        }
+
+        .page-title p {
+            color: #64748b;
+        }
+
+        /* =========================
+           CUSTOMER SEARCH
+        ========================== */
+
+        .customer-box {
+            background: white;
+            padding: 22px;
+            border-radius: 16px;
+
+            display: flex;
+            align-items: center;
+            gap: 12px;
+
+            margin-bottom: 28px;
+
+            box-shadow: 0 8px 25px rgba(15, 23, 42, 0.08);
+        }
+
+        .customer-box label {
+            font-weight: bold;
+            color: #334155;
+            white-space: nowrap;
+        }
+
+        .customer-box input {
+            flex: 1;
+
+            padding: 12px 15px;
+
+            border: 1px solid #cbd5e1;
+            border-radius: 9px;
+
+            outline: none;
+            font-size: 15px;
+        }
+
+        .customer-box input:focus {
+            border-color: #6366f1;
+            box-shadow: 0 0 0 3px rgba(99, 102, 241, 0.12);
+        }
+
+        .load-btn {
+            border: none;
+
+            background: linear-gradient(135deg, #4f46e5, #7c3aed);
+
+            color: white;
+
+            padding: 12px 22px;
+
+            border-radius: 9px;
+
+            font-weight: bold;
+
+            cursor: pointer;
+
+            transition: 0.3s;
+        }
+
+        .load-btn:hover {
+            transform: translateY(-1px);
+            box-shadow: 0 5px 15px rgba(79, 70, 229, 0.3);
+        }
+
+        .load-btn:disabled {
+            opacity: 0.6;
+            cursor: not-allowed;
+        }
+
+        /* =========================
+           CUSTOMER HEADER
+        ========================== */
+
+        .customer-header {
+            display: none;
+
+            background: linear-gradient(135deg, #4338ca, #7c3aed);
+
+            color: white;
+
+            padding: 25px;
+
+            border-radius: 18px;
+
+            margin-bottom: 28px;
+
+            box-shadow: 0 10px 25px rgba(79, 70, 229, 0.2);
+        }
+
+        .customer-header h2 {
+            margin-bottom: 8px;
+        }
+
+        .customer-header p {
+            opacity: 0.9;
+        }
+
+        /* =========================
+           SECTION
+        ========================== */
+
+        .section {
+            margin-bottom: 35px;
+        }
+
+        .section-title {
+            font-size: 24px;
+            color: #312e81;
+            margin-bottom: 18px;
+        }
+
+        /* =========================
+           SUMMARY CARDS
+        ========================== */
+
+        .cards-grid {
+            display: grid;
+
+            grid-template-columns:
+                repeat(auto-fit, minmax(220px, 1fr));
+
+            gap: 18px;
+        }
+
+        .dashboard-card {
+            background: white;
+
+            padding: 22px;
+
+            border-radius: 16px;
+
+            box-shadow:
+                0 8px 25px rgba(15, 23, 42, 0.08);
+
+            border: 1px solid #e2e8f0;
+
+            transition: 0.3s;
+        }
+
+        .clickable-card {
+            cursor: pointer;
+        }
+
+        .clickable-card:hover {
+            transform: translateY(-5px);
+
+            box-shadow:
+                0 14px 30px rgba(15, 23, 42, 0.13);
+
+            border-color: #c7d2fe;
+        }
+
+        .card-icon {
+            font-size: 32px;
+            margin-bottom: 12px;
+        }
+
+        .card-label {
+            color: #64748b;
+            font-size: 14px;
+            margin-bottom: 8px;
+        }
+
+        .card-value {
+            color: #312e81;
+            font-size: 27px;
+            font-weight: bold;
+        }
+
+        .click-hint {
+            margin-top: 10px;
+            font-size: 12px;
+            color: #818cf8;
+        }
+
+        /* =========================
+           SEGMENT
+        ========================== */
+
+        .segment-card {
+            background: linear-gradient(135deg, #ffffff, #eef2ff);
+
+            border: 1px solid #c7d2fe;
+
+            padding: 25px;
+
+            border-radius: 18px;
+
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+
+            gap: 20px;
+        }
+
+        .segment-name {
+            font-size: 28px;
+            font-weight: bold;
+            color: #4338ca;
+        }
+
+        .segment-description {
+            color: #64748b;
+            margin-top: 6px;
+        }
+
+        .segment-icon {
+            font-size: 55px;
+        }
+
+        /* =========================
+           RECOMMENDATIONS
+        ========================== */
+
+        .products-grid {
+            display: grid;
+
+            grid-template-columns:
+                repeat(auto-fit, minmax(210px, 1fr));
+
+            gap: 18px;
+        }
+
+        .product-card {
+            background: white;
+
+            border-radius: 16px;
+
+            overflow: hidden;
+
+            box-shadow:
+                0 8px 25px rgba(15, 23, 42, 0.08);
+
+            border: 1px solid #e2e8f0;
+
+            cursor: pointer;
+
+            transition: 0.3s;
+        }
+
+        .product-card:hover {
+            transform: translateY(-5px);
+
+            box-shadow:
+                0 14px 30px rgba(15, 23, 42, 0.13);
+        }
+
+        .product-icon {
+            height: 120px;
+
+            display: flex;
+            align-items: center;
+            justify-content: center;
+
+            background: #eef2ff;
+
+            font-size: 55px;
+        }
+
+        .product-info {
+            padding: 18px;
+        }
+
+        .product-name {
+            font-weight: bold;
+            color: #334155;
+            margin-bottom: 7px;
+        }
+
+        .product-category {
+            font-size: 13px;
+            color: #64748b;
+            margin-bottom: 10px;
+        }
+
+        .product-price {
+            color: #4f46e5;
+            font-weight: bold;
+            font-size: 18px;
+        }
+
+        .product-rating {
+            color: #f59e0b;
+            margin-top: 7px;
+            font-size: 14px;
+        }
+
+        /* =========================
+           EMPTY / MESSAGE
+        ========================== */
+
+        .message {
+            background: white;
+
+            padding: 35px;
+
+            border-radius: 16px;
+
+            text-align: center;
+
+            color: #64748b;
+
+            box-shadow:
+                0 8px 25px rgba(15, 23, 42, 0.07);
+        }
+
+        .message-icon {
+            font-size: 45px;
+            margin-bottom: 12px;
+        }
+
+        /* =========================
+           MODAL
+        ========================== */
+
+        .modal {
+            display: none;
+
+            position: fixed;
+
+            z-index: 1000;
+
+            left: 0;
+            top: 0;
+
+            width: 100%;
+            height: 100%;
+
+            background: rgba(15, 23, 42, 0.55);
+
+            align-items: center;
+            justify-content: center;
+
+            padding: 20px;
+        }
+
+        .modal.show {
+            display: flex;
+        }
+
+        .modal-content {
+            background: white;
+
+            width: 100%;
+            max-width: 550px;
+
+            border-radius: 20px;
+
+            padding: 28px;
+
+            box-shadow:
+                0 20px 50px rgba(0, 0, 0, 0.25);
+
+            position: relative;
+        }
+
+        .modal-close {
+            position: absolute;
+
+            right: 18px;
+            top: 15px;
+
+            border: none;
+
+            background: #f1f5f9;
+
+            width: 36px;
+            height: 36px;
+
+            border-radius: 50%;
+
+            font-size: 21px;
+
+            cursor: pointer;
+
+            color: #334155;
+        }
+
+        .modal-close:hover {
+            background: #e2e8f0;
+        }
+
+        .modal-title {
+            color: #312e81;
+
+            font-size: 24px;
+
+            margin-bottom: 20px;
+
+            padding-right: 35px;
+        }
+
+        .modal-details {
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+        }
+
+        .detail-row {
+            display: flex;
+
+            justify-content: space-between;
+
+            gap: 20px;
+
+            padding: 13px;
+
+            background: #f8fafc;
+
+            border-radius: 10px;
+        }
+
+        .detail-label {
+            color: #64748b;
+        }
+
+        .detail-value {
+            color: #312e81;
+            font-weight: bold;
+            text-align: right;
+        }
+
+        .modal-footer {
+            margin-top: 20px;
+
+            padding-top: 15px;
+
+            border-top: 1px solid #e2e8f0;
+
+            color: #64748b;
+
+            font-size: 13px;
+        }
+
+        /* =========================
+           RESPONSIVE
+        ========================== */
+
+        @media (max-width: 750px) {
+
+            .navbar {
+                padding: 15px 20px;
+
+                flex-direction: column;
+
+                gap: 12px;
+            }
+
+            .nav-links {
+                justify-content: center;
+            }
+
+            .container {
+                width: 94%;
+            }
+
+            .customer-box {
+                flex-direction: column;
+                align-items: stretch;
+            }
+
+            .segment-card {
+                flex-direction: column;
+                text-align: center;
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+<!-- =========================================
+     NAVBAR
+========================================= -->
+
+<nav class="navbar">
+
+    <div class="logo">
+        🛒 SmartCart
+    </div>
+
+    <div class="nav-links">
+
+        <a href="dashboard.html" class="active">
+            🏠 Dashboard
+        </a>
+
+        <a href="products.html">
+            🛍️ Products
+        </a>
+
+        <a href="cart.html">
+            🛒 Cart
+        </a>
+
+        <a href="wishlist.html">
+            ❤️ Wishlist
+        </a>
+
+        <a href="orders.html">
+            📦 My Orders
+        </a>
+
+    </div>
+
+</nav>
+
+
+<!-- =========================================
+     MAIN CONTAINER
+========================================= -->
+
+<div class="container">
+
+    <div class="page-title">
+
+        <h1>
+            📊 Customer Dashboard
+        </h1>
+
+        <p>
+            View your purchase activity, customer segment and recommendations
+        </p>
+
+    </div>
+
+
+    <!-- =====================================
+         CUSTOMER ID
+    ====================================== -->
+
+    <div class="customer-box">
+
+        <label for="customerId">
+            Customer ID
+        </label>
+
+        <input
+            type="number"
+            id="customerId"
+            min="1"
+            placeholder="Enter Customer ID"
+            onkeydown="handleEnter(event)"
+        >
+
+        <button
+            class="load-btn"
+            id="loadButton"
+            onclick="loadDashboard()"
+        >
+            🔍 Load Dashboard
+        </button>
+
+    </div>
+
+
+    <!-- =====================================
+         CUSTOMER HEADER
+    ====================================== -->
+
+    <div
+        class="customer-header"
+        id="customerHeader"
+    >
+
+        <h2 id="customerName">
+            Customer Dashboard
+        </h2>
+
+        <p id="customerEmail">
+        </p>
+
+    </div>
+
+
+    <!-- =====================================
+         PURCHASE SUMMARY
+    ====================================== -->
+
+    <div class="section">
+
+        <h2 class="section-title">
+            💰 Purchase Summary
+        </h2>
+
+        <div
+            class="cards-grid"
+            id="purchaseCards"
+        >
+
+            <div class="message">
+                <div class="message-icon">
+                    📊
+                </div>
+
+                <p>
+                    Enter Customer ID to load dashboard
+                </p>
+            </div>
+
+        </div>
+
+    </div>
+
+
+    <!-- =====================================
+         CUSTOMER ACTIVITY
+    ====================================== -->
+
+    <div class="section">
+
+        <h2 class="section-title">
+            📈 Customer Activity
+        </h2>
+
+        <div
+            class="cards-grid"
+            id="activityCards"
+        >
+
+            <div class="message">
+                <div class="message-icon">
+                    📈
+                </div>
+
+                <p>
+                    Activity information will appear here
+                </p>
+            </div>
+
+        </div>
+
+    </div>
+
+
+    <!-- =====================================
+         CUSTOMER SEGMENT
+    ====================================== -->
+
+    <div class="section">
+
+        <h2 class="section-title">
+            🎯 Customer Segment
+        </h2>
+
+        <div id="segmentContainer">
+
+            <div class="message">
+
+                <div class="message-icon">
+                    🎯
+                </div>
+
+                <p>
+                    Segment information will appear here
+                </p>
+
+            </div>
+
+        </div>
+
+    </div>
+
+
+    <!-- =====================================
+         RECOMMENDATIONS
+    ====================================== -->
+
+    <div class="section">
+
+        <h2 class="section-title">
+            ⭐ Recommended Products
+        </h2>
+
+        <div
+            class="products-grid"
+            id="recommendationsContainer"
+        >
+
+            <div class="message">
+
+                <div class="message-icon">
+                    ⭐
+                </div>
+
+                <p>
+                    Recommendations will appear here
+                </p>
+
+            </div>
+
+        </div>
+
+    </div>
+
+</div>
+
+
+<!-- =========================================
+     DETAILS MODAL
+========================================= -->
+
+<div
+    class="modal"
+    id="detailsModal"
+    onclick="closeModalOnOutsideClick(event)"
+>
+
+    <div
+        class="modal-content"
+        onclick="event.stopPropagation()"
+    >
+
+        <button
+            class="modal-close"
+            onclick="closeDetailsModal()"
+        >
+            ×
+        </button>
+
+        <h2
+            class="modal-title"
+            id="modalTitle"
+        >
+            Details
+        </h2>
+
+        <div
+            class="modal-details"
+            id="modalDetails"
+        >
+        </div>
+
+        <div class="modal-footer">
+            SmartCart customer analytics
+        </div>
+
+    </div>
+
+</div>
+
+
+<script>
+
+    // =========================================
+    // API
+    // =========================================
+
+    const API_URL =
+        "http://127.0.0.1:8000";
+
+
+    // =========================================
+    // ENTER KEY
+    // =========================================
+
+    function handleEnter(event) {
+
+        if (event.key === "Enter") {
+
+            loadDashboard();
+
+        }
+
+    }
+
+
+    // =========================================
+    // LOAD DASHBOARD
+    // =========================================
+
+    async function loadDashboard() {
+
+        const input =
+            document.getElementById(
+                "customerId"
+            );
+
+        const customerId =
+            input.value.trim();
+
+        const loadButton =
+            document.getElementById(
+                "loadButton"
+            );
+
+
+        if (!customerId) {
+
+            alert(
+                "Please enter a Customer ID."
+            );
+
+            input.focus();
+
+            return;
+
+        }
+
+
+        loadButton.disabled = true;
+
+        loadButton.innerText =
+            "⏳ Loading...";
+
+
+        try {
+
+            const response =
+                await fetch(
+                    API_URL +
+                    "/ml/customer-dashboard/" +
+                    customerId
+                );
+
+
+            const data =
+                await response.json();
+
+
+            console.log(
+                "Dashboard response:",
+                data
+            );
+
+
+            if (!response.ok) {
+
+                throw new Error(
+                    data.detail ||
+                    "Unable to load dashboard"
+                );
+
+            }
+
+
+            displayDashboard(
+                data
+            );
+
+
+        } catch (error) {
+
+            console.error(
+                "Dashboard error:",
+                error
+            );
+
+            alert(
+                "❌ " +
+                error.message
+            );
+
+        } finally {
+
+            loadButton.disabled = false;
+
+            loadButton.innerText =
+                "🔍 Load Dashboard";
+
+        }
+
+    }
+
+
+    // =========================================
+    // DISPLAY DASHBOARD
+    // =========================================
+
+    function displayDashboard(
+        data
+    ) {
+
+        const customer =
+            data.customer || {};
+
+        const summary =
+            data.purchase_summary ||
+            {};
+
+        const activity =
+            data.activity ||
+            {};
+
+        const segment =
+            data.segment ||
+            {};
+
+        const recommendations =
+            data.recommendations ||
+            [];
+
+
+        // =====================================
+        // CUSTOMER HEADER
+        // =====================================
+
+        const customerHeader =
+            document.getElementById(
+                "customerHeader"
+            );
+
+        customerHeader.style.display =
+            "block";
+
+
+        document.getElementById(
+            "customerName"
+        ).innerText =
+            "Welcome, " +
+            (
+                customer.name ||
+                "Customer"
+            );
+
+
+        document.getElementById(
+            "customerEmail"
+        ).innerText =
+            customer.email ||
+            (
+                "Customer ID: " +
+                customer.customer_id
+            );
+
+
+        // =====================================
+        // PURCHASE SUMMARY
+        // =====================================
+
+        document.getElementById(
+            "purchaseCards"
+        ).innerHTML = `
+
+            ${createCard(
+                "🛍️",
+                "Total Purchases",
+                summary.total_purchases ?? 0,
+                "purchase",
+                "total_purchases"
+            )}
+
+            ${createCard(
+                "💰",
+                "Total Spending",
+                formatCurrency(
+                    summary.total_spending
+                ),
+                "purchase",
+                "total_spending"
+            )}
+
+            ${createCard(
+                "💵",
+                "Average Order",
+                formatCurrency(
+                    summary.average_order_value
+                ),
+                "purchase",
+                "average_order_value"
+            )}
+
+            ${createCard(
+                "🌐",
+                "Website Visits",
+                activity.website_visits ?? 0,
+                "purchase",
+                "website_visits"
+            )}
+
+        `;
+
+
+        // =====================================
+        // ACTIVITY
+        // =====================================
+
+        document.getElementById(
+            "activityCards"
+        ).innerHTML = `
+
+            ${createCard(
+                "👁️",
+                "Product Views",
+                activity.product_views ?? 0,
+                "activity",
+                "product_views"
+            )}
+
+            ${createCard(
+                "🛒",
+                "Cart Additions",
+                activity.cart_additions ?? 0,
+                "activity",
+                "cart_additions"
+            )}
+
+            ${createCard(
+                "❤️",
+                "Wishlist Additions",
+                activity.wishlist_additions ?? 0,
+                "activity",
+                "wishlist_additions"
+            )}
+
+            ${createCard(
+                "⏱️",
+                "Time Spent",
+                (
+                    activity.time_spent ?? 0
+                ) + " min",
+                "activity",
+                "time_spent"
+            )}
+
+        `;
+
+
+        // =====================================
+        // SEGMENT
+        // =====================================
+
+        const segmentName =
+            segment.segment ||
+            "Unknown";
+
+
+        document.getElementById(
+            "segmentContainer"
+        ).innerHTML = `
+
+            <div class="segment-card">
+
+                <div>
+
+                    <div class="segment-name">
+                        ${escapeHtml(
+                            segmentName
+                        )}
+                    </div>
+
+                    <div class="segment-description">
+                        Customer behavior segment
+                    </div>
+
+                </div>
+
+                <div class="segment-icon">
+                    🎯
+                </div>
+
+            </div>
+
+        `;
+
+
+        // =====================================
+        // RECOMMENDATIONS
+        // =====================================
+
+        const recommendationContainer =
+            document.getElementById(
+                "recommendationsContainer"
+            );
+
+
+        if (
+            !Array.isArray(
+                recommendations
+            ) ||
+            recommendations.length === 0
+        ) {
+
+            recommendationContainer.innerHTML = `
+
+                <div class="message">
+
+                    <div class="message-icon">
+                        📭
+                    </div>
+
+                    <p>
+                        No recommendations available.
+                    </p>
+
+                </div>
+
+            `;
+
+            return;
+
+        }
+
+
+        recommendationContainer.innerHTML =
+            recommendations.map(
+                product =>
+                    createProductCard(
+                        product
+                    )
+            ).join("");
+
+    }
+
+
+    // =========================================
+    // CREATE DASHBOARD CARD
+    // =========================================
+
+    function createCard(
+        icon,
+        label,
+        value,
+        type,
+        key
+    ) {
+
+        return `
+
+            <div
+                class="dashboard-card clickable-card"
+                onclick="showDetails(
+                    '${type}',
+                    '${key}',
+                    '${escapeAttribute(
+                        String(value)
+                    )}'
+                )"
+            >
+
+                <div class="card-icon">
+                    ${icon}
+                </div>
+
+                <div class="card-label">
+                    ${label}
+                </div>
+
+                <div class="card-value">
+                    ${value}
+                </div>
+
+                <div class="click-hint">
+                    Click to view details →
+                </div>
+
+            </div>
+
+        `;
+
+    }
+
+
+    // =========================================
+    // SHOW DETAILS
+    // =========================================
+
+    function showDetails(
+        type,
+        key,
+        value
+    ) {
+
+        let title =
+            "Details";
+
+        let details = "";
+
+
+        if (
+            type === "purchase"
+        ) {
+
+            if (
+                key ===
+                "total_purchases"
+            ) {
+
+                title =
+                    "🛍️ Total Purchases";
+
+                details = `
+                    <div class="detail-row">
+                        <span class="detail-label">
+                            Total Orders
+                        </span>
+
+                        <span class="detail-value">
+                            ${value}
+                        </span>
+                    </div>
+
+                    <div class="detail-row">
+                        <span class="detail-label">
+                            Meaning
+                        </span>
+
+                        <span class="detail-value">
+                            Number of purchases made
+                        </span>
+                    </div>
+                `;
+
+            }
+
+            else if (
+                key ===
+                "total_spending"
+            ) {
+
+                title =
+                    "💰 Total Spending";
+
+                details = `
+                    <div class="detail-row">
+                        <span class="detail-label">
+                            Total Spending
+                        </span>
+
+                        <span class="detail-value">
+                            ${value}
+                        </span>
+                    </div>
+
+                    <div class="detail-row">
+                        <span class="detail-label">
+                            Meaning
+                        </span>
+
+                        <span class="detail-value">
+                            Total customer spending
+                        </span>
+                    </div>
+                `;
+
+            }
+
+            else if (
+                key ===
+                "average_order_value"
+            ) {
+
+                title =
+                    "💵 Average Order";
+
+                details = `
+                    <div class="detail-row">
+                        <span class="detail-label">
+                            Average Order Value
+                        </span>
+
+                        <span class="detail-value">
+                            ${value}
+                        </span>
+                    </div>
+
+                    <div class="detail-row">
+                        <span class="detail-label">
+                            Meaning
+                        </span>
+
+                        <span class="detail-value">
+                            Average amount spent per order
+                        </span>
+                    </div>
+                `;
+
+            }
+
+            else {
+
+                title =
+                    "🌐 Website Visits";
+
+                details = `
+                    <div class="detail-row">
+                        <span class="detail-label">
+                            Website Visits
+                        </span>
+
+                        <span class="detail-value">
+                            ${value}
+                        </span>
+                    </div>
+
+                    <div class="detail-row">
+                        <span class="detail-label">
+                            Meaning
+                        </span>
+
+                        <span class="detail-value">
+                            Number of recorded website visits
+                        </span>
+                    </div>
+                `;
+
+            }
+
+        }
+
+
+        else {
+
+            if (
+                key ===
+                "product_views"
+            ) {
+
+                title =
+                    "👁️ Product Views";
+
+                details = `
+                    <div class="detail-row">
+                        <span class="detail-label">
+                            Product Views
+                        </span>
+
+                        <span class="detail-value">
+                            ${value}
+                        </span>
+                    </div>
+
+                    <div class="detail-row">
+                        <span class="detail-label">
+                            Meaning
+                        </span>
+
+                        <span class="detail-value">
+                            Products viewed by customer
+                        </span>
+                    </div>
+                `;
+
+            }
+
+            else if (
+                key ===
+                "cart_additions"
+            ) {
+
+                title =
+                    "🛒 Cart Additions";
+
+                details = `
+                    <div class="detail-row">
+                        <span class="detail-label">
+                            Cart Additions
+                        </span>
+
+                        <span class="detail-value">
+                            ${value}
+                        </span>
+                    </div>
+
+                    <div class="detail-row">
+                        <span class="detail-label">
+                            Meaning
+                        </span>
+
+                        <span class="detail-value">
+                            Products added to cart
+                        </span>
+                    </div>
+                `;
+
+            }
+
+            else if (
+                key ===
+                "wishlist_additions"
+            ) {
+
+                title =
+                    "❤️ Wishlist Additions";
+
+                details = `
+                    <div class="detail-row">
+                        <span class="detail-label">
+                            Wishlist Additions
+                        </span>
+
+                        <span class="detail-value">
+                            ${value}
+                        </span>
+                    </div>
+
+                    <div class="detail-row">
+                        <span class="detail-label">
+                            Meaning
+                        </span>
+
+                        <span class="detail-value">
+                            Products added to wishlist
+                        </span>
+                    </div>
+                `;
+
+            }
+
+            else {
+
+                title =
+                    "⏱️ Time Spent";
+
+                details = `
+                    <div class="detail-row">
+                        <span class="detail-label">
+                            Time Spent
+                        </span>
+
+                        <span class="detail-value">
+                            ${value}
+                        </span>
+                    </div>
+
+                    <div class="detail-row">
+                        <span class="detail-label">
+                            Meaning
+                        </span>
+
+                        <span class="detail-value">
+                            Time spent interacting with products
+                        </span>
+                    </div>
+                `;
+
+            }
+
+        }
+
+
+        openDetailsModal(
+            title,
+            details
+        );
+
+    }
+
+
+    // =========================================
+    // MODAL
+    // =========================================
+
+    function openDetailsModal(
+        title,
+        details
+    ) {
+
+        document.getElementById(
+            "modalTitle"
+        ).innerText =
+            title;
+
+        document.getElementById(
+            "modalDetails"
+        ).innerHTML =
+            details;
+
+        document.getElementById(
+            "detailsModal"
+        ).classList.add(
+            "show"
+        );
+
+    }
+
+
+    function closeDetailsModal() {
+
+        document.getElementById(
+            "detailsModal"
+        ).classList.remove(
+            "show"
+        );
+
+    }
+
+
+    function closeModalOnOutsideClick(
+        event
+    ) {
+
+        if (
+            event.target.id ===
+            "detailsModal"
+        ) {
+
+            closeDetailsModal();
+
+        }
+
+    }
+
+
+    document.addEventListener(
+        "keydown",
+        function(event) {
+
+            if (
+                event.key === "Escape"
+            ) {
+
+                closeDetailsModal();
+
+            }
+
+        }
+    );
+
+
+    // =========================================
+    // PRODUCT CARD
+    // =========================================
+
+    function createProductCard(
+        product
+    ) {
+
+        const productId =
+            product.product_id;
+
+        const productName =
+            product.product_name ||
+            "Product " +
+            productId;
+
+        const category =
+            product.category ||
+            "Product";
+
+        const price =
+            Number(
+                product.price || 0
+            ).toLocaleString(
+                "en-IN",
+                {
+                    minimumFractionDigits: 2,
+                    maximumFractionDigits: 2
+                }
+            );
+
+        const rating =
+            product.rating ??
+            "N/A";
+
+
+        return `
+
+            <div
+                class="product-card"
+                onclick="openProduct(
+                    ${productId}
+                )"
+            >
+
+                <div class="product-icon">
+                    🛍️
+                </div>
+
+                <div class="product-info">
+
+                    <div class="product-name">
+                        ${escapeHtml(
+                            productName
+                        )}
+                    </div>
+
+                    <div class="product-category">
+                        ${escapeHtml(
+                            category
+                        )}
+                    </div>
+
+                    <div class="product-price">
+                        ₹${price}
+                    </div>
+
+                    <div class="product-rating">
+                        ⭐ ${rating}
+                    </div>
+
+                </div>
+
+            </div>
+
+        `;
+
+    }
+
+
+    // =========================================
+    // OPEN PRODUCT
+    // =========================================
+
+    function openProduct(
+        productId
+    ) {
+
+        window.location.href =
+            "products.html?product_id=" +
+            productId;
+
+    }
+
+
+    // =========================================
+    // FORMAT CURRENCY
+    // =========================================
+
+    function formatCurrency(
+        value
+    ) {
+
+        return "₹" +
+            Number(
+                value || 0
+            ).toLocaleString(
+                "en-IN",
+                {
+                    minimumFractionDigits: 2,
+                    maximumFractionDigits: 2
+                }
+            );
+
+    }
+
+
+    // =========================================
+    // ESCAPE HTML
+    // =========================================
+
+    function escapeHtml(
+        value
+    ) {
+
+        const div =
+            document.createElement(
+                "div"
+            );
+
+        div.textContent =
+            value;
+
+        return div.innerHTML;
+
+    }
+
+
+    function escapeAttribute(
+        value
+    ) {
+
+        return String(value)
+            .replace(
+                /'/g,
+                "\\'"
+            );
+
+    }
+
+</script>
+
+</body>
+</html>

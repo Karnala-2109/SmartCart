@@ -1,0 +1,958 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>SmartCart - Purchase Prediction</title>
+
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: Arial, Helvetica, sans-serif;
+        }
+
+        body {
+            min-height: 100vh;
+            background: linear-gradient(135deg, #667eea, #764ba2, #f093fb);
+            background-size: 300% 300%;
+            animation: gradientMove 12s ease infinite;
+            color: #333;
+        }
+
+        @keyframes gradientMove {
+            0% {
+                background-position: 0% 50%;
+            }
+
+            50% {
+                background-position: 100% 50%;
+            }
+
+            100% {
+                background-position: 0% 50%;
+            }
+        }
+
+        /* HEADER */
+
+        header {
+            background: rgba(255, 255, 255, 0.96);
+            padding: 16px 40px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.12);
+        }
+
+        .logo {
+            font-size: 28px;
+            font-weight: bold;
+            background: linear-gradient(90deg, #667eea, #764ba2);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        nav {
+            display: flex;
+            gap: 10px;
+            align-items: center;
+            flex-wrap: wrap;
+        }
+
+        nav a,
+        .logout-btn {
+            text-decoration: none;
+            color: #444;
+            padding: 9px 14px;
+            border-radius: 10px;
+            font-size: 14px;
+            font-weight: 600;
+            border: none;
+            background: transparent;
+            cursor: pointer;
+            transition: 0.3s;
+        }
+
+        nav a:hover,
+        .logout-btn:hover {
+            background: #667eea;
+            color: white;
+            transform: translateY(-2px);
+        }
+
+        /* HERO */
+
+        .hero {
+            text-align: center;
+            color: white;
+            padding: 45px 20px 30px;
+        }
+
+        .hero h1 {
+            font-size: 40px;
+            margin-bottom: 12px;
+        }
+
+        .hero p {
+            font-size: 17px;
+            opacity: 0.95;
+        }
+
+        /* MAIN */
+
+        .container {
+            width: 92%;
+            max-width: 1100px;
+            margin: auto;
+            padding-bottom: 50px;
+        }
+
+        .prediction-card {
+            background: rgba(255,255,255,0.97);
+            border-radius: 24px;
+            padding: 30px;
+            box-shadow: 0 15px 40px rgba(0,0,0,0.18);
+        }
+
+        .section-title {
+            font-size: 23px;
+            color: #4c51bf;
+            margin-bottom: 22px;
+        }
+
+        .input-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 18px;
+        }
+
+        .input-group {
+            display: flex;
+            flex-direction: column;
+        }
+
+        .input-group label {
+            font-size: 14px;
+            font-weight: 600;
+            margin-bottom: 7px;
+            color: #444;
+        }
+
+        .input-group input {
+            padding: 12px 14px;
+            border: 2px solid #e2e8f0;
+            border-radius: 12px;
+            outline: none;
+            font-size: 14px;
+            transition: 0.3s;
+        }
+
+        .input-group input:focus {
+            border-color: #667eea;
+            box-shadow: 0 0 0 3px rgba(102,126,234,0.12);
+        }
+
+        .input-group input::placeholder {
+            color: #9ca3af;
+        }
+
+        /* PREDICT BUTTON */
+
+        .predict-area {
+            text-align: center;
+            margin-top: 30px;
+        }
+
+        .predict-btn {
+            border: none;
+            padding: 14px 38px;
+            border-radius: 14px;
+            background: linear-gradient(90deg, #667eea, #764ba2);
+            color: white;
+            font-size: 17px;
+            font-weight: bold;
+            cursor: pointer;
+            box-shadow: 0 8px 20px rgba(102,126,234,0.35);
+            transition: 0.3s;
+        }
+
+        .predict-btn:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 12px 25px rgba(102,126,234,0.45);
+        }
+
+        /* RESULT */
+
+        .result {
+            display: none;
+            margin-top: 30px;
+            padding: 25px;
+            border-radius: 20px;
+            text-align: center;
+        }
+
+        .result.purchase {
+            background: linear-gradient(135deg, #d1fae5, #ecfdf5);
+            border: 2px solid #34d399;
+        }
+
+        .result.no-purchase {
+            background: linear-gradient(135deg, #fee2e2, #fff1f2);
+            border: 2px solid #fb7185;
+        }
+
+        .result h2 {
+            font-size: 30px;
+            margin-bottom: 10px;
+        }
+
+        .result p {
+            font-size: 17px;
+            margin: 8px;
+        }
+
+        .probability {
+            font-size: 28px;
+            font-weight: bold;
+            margin-top: 12px;
+        }
+
+        /* ERROR */
+
+        .error {
+            display: none;
+            margin-top: 20px;
+            padding: 15px;
+            border-radius: 12px;
+            background: #fee2e2;
+            color: #b91c1c;
+            text-align: center;
+            font-weight: 600;
+        }
+
+        /* INFO */
+
+        .info-box {
+            margin-top: 25px;
+            padding: 18px;
+            background: #f8fafc;
+            border-left: 5px solid #667eea;
+            border-radius: 10px;
+            color: #555;
+            line-height: 1.6;
+            font-size: 14px;
+        }
+
+        /* FOOTER */
+
+        footer {
+            text-align: center;
+            color: white;
+            padding: 25px;
+            font-size: 14px;
+        }
+
+        /* RESPONSIVE */
+
+        @media (max-width: 850px) {
+
+            .input-grid {
+                grid-template-columns: repeat(2, 1fr);
+            }
+
+            header {
+                padding: 15px 20px;
+                flex-direction: column;
+                gap: 12px;
+            }
+
+            .hero h1 {
+                font-size: 32px;
+            }
+        }
+
+        @media (max-width: 550px) {
+
+            .input-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .prediction-card {
+                padding: 20px;
+            }
+
+            nav {
+                justify-content: center;
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+<header>
+
+    <div class="logo">
+        🛒 SmartCart
+    </div>
+
+    <nav>
+
+        <a href="products.html">
+            🛍️ Products
+        </a>
+
+        <a href="dashboard.html">
+            📊 Dashboard
+        </a>
+
+        <a href="recommendations.html">
+            🤖 Recommendations
+        </a>
+
+        <a href="prediction.html">
+            🔮 Prediction
+        </a>
+
+        <a href="segment.html">
+            👤 Segment
+        </a>
+
+        <a href="cart.html">
+            🛒 Cart
+        </a>
+
+        <a href="wishlist.html">
+            ❤️ Wishlist
+        </a>
+
+        <a href="orders.html">
+            📦 My Orders
+        </a>
+
+        <button
+            class="logout-btn"
+            onclick="logout()"
+        >
+            🚪 Logout
+        </button>
+
+    </nav>
+
+</header>
+
+
+<section class="hero">
+
+    <h1>
+        🔮 Purchase Prediction
+    </h1>
+
+    <p>
+        Enter customer and product information
+        to predict purchase probability.
+    </p>
+
+</section>
+
+
+<div class="container">
+
+    <div class="prediction-card">
+
+        <h2 class="section-title">
+            📋 Enter Customer & Product Details
+        </h2>
+
+
+        <div class="input-grid">
+
+
+            <div class="input-group">
+
+                <label>
+                    Customer Age
+                </label>
+
+                <input
+                    type="number"
+                    id="customer_age"
+                    placeholder="Enter customer age"
+                    min="1"
+                    required
+                >
+
+            </div>
+
+
+            <div class="input-group">
+
+                <label>
+                    Total Purchases
+                </label>
+
+                <input
+                    type="number"
+                    id="total_purchases"
+                    placeholder="Enter total purchases"
+                    min="0"
+                    required
+                >
+
+            </div>
+
+
+            <div class="input-group">
+
+                <label>
+                    Total Spending
+                </label>
+
+                <input
+                    type="number"
+                    id="total_spending"
+                    placeholder="Enter total spending"
+                    min="0"
+                    step="0.01"
+                    required
+                >
+
+            </div>
+
+
+            <div class="input-group">
+
+                <label>
+                    Average Order Value
+                </label>
+
+                <input
+                    type="number"
+                    id="average_order_value"
+                    placeholder="Enter average order value"
+                    min="0"
+                    step="0.01"
+                    required
+                >
+
+            </div>
+
+
+            <div class="input-group">
+
+                <label>
+                    Website Visits
+                </label>
+
+                <input
+                    type="number"
+                    id="website_visits"
+                    placeholder="Enter website visits"
+                    min="0"
+                    required
+                >
+
+            </div>
+
+
+            <div class="input-group">
+
+                <label>
+                    Product Price
+                </label>
+
+                <input
+                    type="number"
+                    id="product_price"
+                    placeholder="Enter product price"
+                    min="0"
+                    step="0.01"
+                    required
+                >
+
+            </div>
+
+
+            <div class="input-group">
+
+                <label>
+                    Product Rating
+                </label>
+
+                <input
+                    type="number"
+                    step="0.1"
+                    id="product_rating"
+                    placeholder="Enter rating (1-5)"
+                    min="0"
+                    max="5"
+                    required
+                >
+
+            </div>
+
+
+            <div class="input-group">
+
+                <label>
+                    Product Views
+                </label>
+
+                <input
+                    type="number"
+                    id="product_views"
+                    placeholder="Enter product views"
+                    min="0"
+                    required
+                >
+
+            </div>
+
+
+            <div class="input-group">
+
+                <label>
+                    Cart Additions
+                </label>
+
+                <input
+                    type="number"
+                    id="cart_additions"
+                    placeholder="Enter cart additions"
+                    min="0"
+                    required
+                >
+
+            </div>
+
+
+            <div class="input-group">
+
+                <label>
+                    Wishlist Additions
+                </label>
+
+                <input
+                    type="number"
+                    id="wishlist_additions"
+                    placeholder="Enter wishlist additions"
+                    min="0"
+                    required
+                >
+
+            </div>
+
+
+            <div class="input-group">
+
+                <label>
+                    Previous Purchases
+                </label>
+
+                <input
+                    type="number"
+                    id="previous_purchases"
+                    placeholder="Enter previous purchases"
+                    min="0"
+                    required
+                >
+
+            </div>
+
+
+            <div class="input-group">
+
+                <label>
+                    Time Spent
+                </label>
+
+                <input
+                    type="number"
+                    id="time_spent"
+                    placeholder="Enter time spent"
+                    min="0"
+                    required
+                >
+
+            </div>
+
+
+        </div>
+
+
+        <div class="predict-area">
+
+            <button
+                class="predict-btn"
+                onclick="predictPurchase()"
+            >
+                🔮 Predict Purchase
+            </button>
+
+        </div>
+
+
+        <div
+            id="error"
+            class="error"
+        ></div>
+
+
+        <div
+            id="result"
+            class="result"
+        >
+
+            <h2 id="resultTitle"></h2>
+
+            <p id="resultText"></p>
+
+            <div
+                class="probability"
+                id="probability"
+            ></div>
+
+        </div>
+
+
+        <div class="info-box">
+
+            💡 <strong>How it works:</strong>
+
+            SmartCart uses the trained Machine Learning
+            model to analyze customer behavior, product
+            information, previous purchases, website
+            activity and engagement to predict whether
+            the customer is likely to purchase the product.
+
+        </div>
+
+    </div>
+
+</div>
+
+
+<footer>
+
+    © 2026 SmartCart |
+    Intelligent E-Commerce Platform 🤖
+
+</footer>
+
+
+<script>
+
+const API_URL =
+    "http://127.0.0.1:8000";
+
+
+/* ================= LOGOUT ================= */
+
+function logout() {
+
+    localStorage.removeItem(
+        "access_token"
+    );
+
+    localStorage.removeItem(
+        "customer_id"
+    );
+
+    localStorage.removeItem(
+        "username"
+    );
+
+    localStorage.removeItem(
+        "role"
+    );
+
+    window.location.href =
+        "index.html";
+
+}
+
+
+/* ================= PREDICTION ================= */
+
+async function predictPurchase() {
+
+    const resultBox =
+        document.getElementById(
+            "result"
+        );
+
+    const errorBox =
+        document.getElementById(
+            "error"
+        );
+
+
+    resultBox.style.display =
+        "none";
+
+    errorBox.style.display =
+        "none";
+
+
+    /* ================= GET VALUES ================= */
+
+    const fields = [
+
+        "customer_age",
+
+        "total_purchases",
+
+        "total_spending",
+
+        "average_order_value",
+
+        "website_visits",
+
+        "product_price",
+
+        "product_rating",
+
+        "product_views",
+
+        "cart_additions",
+
+        "wishlist_additions",
+
+        "previous_purchases",
+
+        "time_spent"
+
+    ];
+
+
+    /* ================= VALIDATION ================= */
+
+    for (const field of fields) {
+
+        const input =
+            document.getElementById(
+                field
+            );
+
+        if (
+            input.value.trim() === ""
+        ) {
+
+            errorBox.innerHTML =
+                "⚠️ Please enter a value for all fields.";
+
+            errorBox.style.display =
+                "block";
+
+            input.focus();
+
+            return;
+
+        }
+
+    }
+
+
+    /* ================= CREATE PARAMETERS ================= */
+
+    const params =
+        new URLSearchParams({
+
+            customer_age:
+                document.getElementById(
+                    "customer_age"
+                ).value,
+
+            total_purchases:
+                document.getElementById(
+                    "total_purchases"
+                ).value,
+
+            total_spending:
+                document.getElementById(
+                    "total_spending"
+                ).value,
+
+            average_order_value:
+                document.getElementById(
+                    "average_order_value"
+                ).value,
+
+            website_visits:
+                document.getElementById(
+                    "website_visits"
+                ).value,
+
+            product_price:
+                document.getElementById(
+                    "product_price"
+                ).value,
+
+            product_rating:
+                document.getElementById(
+                    "product_rating"
+                ).value,
+
+            product_views:
+                document.getElementById(
+                    "product_views"
+                ).value,
+
+            cart_additions:
+                document.getElementById(
+                    "cart_additions"
+                ).value,
+
+            wishlist_additions:
+                document.getElementById(
+                    "wishlist_additions"
+                ).value,
+
+            previous_purchases:
+                document.getElementById(
+                    "previous_purchases"
+                ).value,
+
+            time_spent:
+                document.getElementById(
+                    "time_spent"
+                ).value
+
+        });
+
+
+    /* ================= API CALL ================= */
+
+    try {
+
+        const response =
+            await fetch(
+
+                API_URL +
+                "/ml/predict-purchase?" +
+                params.toString(),
+
+                {
+                    method: "GET"
+                }
+
+            );
+
+
+        const data =
+            await response.json();
+
+
+        if (!response.ok) {
+
+            throw new Error(
+                data.detail ||
+                "Prediction failed"
+            );
+
+        }
+
+
+        /* ================= RESULT ELEMENTS ================= */
+
+        const title =
+            document.getElementById(
+                "resultTitle"
+            );
+
+        const text =
+            document.getElementById(
+                "resultText"
+            );
+
+        const probability =
+            document.getElementById(
+                "probability"
+            );
+
+
+        /* ================= PREDICTION ================= */
+
+        if (
+            data.prediction === 1
+        ) {
+
+            resultBox.className =
+                "result purchase";
+
+            title.innerHTML =
+                "🎉 Customer Will Purchase!";
+
+            text.innerHTML =
+                "The ML model predicts that this customer is likely to purchase the product.";
+
+        }
+
+        else {
+
+            resultBox.className =
+                "result no-purchase";
+
+            title.innerHTML =
+                "😔 Customer May Not Purchase";
+
+            text.innerHTML =
+                "The ML model predicts that this customer is unlikely to purchase the product.";
+
+        }
+
+
+        /* ================= PROBABILITY ================= */
+
+        probability.innerHTML =
+            "Purchase Probability: " +
+            (
+                data.purchase_probability *
+                100
+            ).toFixed(1) +
+            "%";
+
+
+        resultBox.style.display =
+            "block";
+
+
+        resultBox.scrollIntoView({
+
+            behavior: "smooth",
+
+            block: "center"
+
+        });
+
+
+    }
+
+    catch (error) {
+
+        console.error(
+            "Prediction error:",
+            error
+        );
+
+        errorBox.innerHTML =
+            "❌ " +
+            error.message;
+
+        errorBox.style.display =
+            "block";
+
+    }
+
+}
+
+</script>
+
+</body>
+</html>

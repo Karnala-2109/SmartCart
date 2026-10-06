@@ -1,0 +1,25 @@
+# Virtual environment
+.venv/
+
+# Python cache
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+
+# Environment / secrets
+.env
+.env.*
+
+# Local database
+*.db
+
+# VS Code
+.vscode/
+
+# EDA generated output
+eda_output/
+
+# OS files
+.DS_Store
+Thumbs.db

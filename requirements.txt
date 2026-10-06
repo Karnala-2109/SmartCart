@@ -1,0 +1,13 @@
+fastapi
+uvicorn[standard]
+sqlalchemy
+pandas
+numpy
+scikit-learn
+joblib
+pydantic[email]
+PyJWT
+bcrypt
+python-multipart
+matplotlib
+seaborn
